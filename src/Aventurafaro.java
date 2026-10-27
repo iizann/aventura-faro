@@ -94,6 +94,7 @@ public class Aventurafaro {
     public static void Escena3() {
         System.out.println("Llegas a la planta baja del faro. Hay tres puertas: " +
                 "\n la de la cocina, la de la biblioteca y una puerta pequeña al fondo, con la madera hinchada por la humedad.");
+
     }
 
 
@@ -119,6 +120,7 @@ public class Aventurafaro {
             } while (opcion < 1 || opcion > max);
 
             return opcion;
+
         }
 
     }
