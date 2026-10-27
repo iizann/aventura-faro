@@ -1,4 +1,5 @@
-
+// Repositorio: https://github.com/iizann/aventura-faro
+// Estructura principal para el juego
 import java.util.Scanner;
 
 public class Aventurafaro {
