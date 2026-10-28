@@ -1,11 +1,13 @@
 // Repositorio: https://github.com/iizann/aventura-faro
 // Estructura principal
 
+import java.util.Random;
 import java.util.Scanner;
 
 public class Aventurafaro {
 
     static Scanner sc = new Scanner(System.in);
+    static Random azar = new Random();
     static int vidas = 3;
     static boolean tieneLlave = false;
     static boolean tieneNavaja = false;
@@ -79,16 +81,12 @@ public class Aventurafaro {
             case 1:
                 System.out.println("Has cogido la llave");
                 tieneLlave = true;
-                tieneNavaja = false;
-                tieneCerillas = false;
                 Escena3();
                 break;
 
             case 2:
                 System.out.println("Has cogido la navaja");
                 tieneNavaja = true;
-                tieneLlave = false;
-                tieneCerillas = false;
                 Escena3();
                 break;
 
@@ -116,7 +114,7 @@ public class Aventurafaro {
         System.out.println("¿Por qué puerta te atreves a pasar?");
         System.out.println("1 - Puerta de la cocina");
         System.out.println("2 - Puerta de la biblioteca");
-        System.out.println("3 - Puerta del fondo, con la madera astillada");
+        System.out.println("3 - Puerta del fondo, con la madera hinchada");
 
         int puerta = leerOpcion(3);
 
@@ -137,13 +135,13 @@ public class Aventurafaro {
 
                 if (tieneLlave) {
                     System.out.println("Has abierto la puerta");
-                    // Aquí irá la llamada a la escena 7.
+                    Escena6();
                 } else {
                     System.out.println("No tienes la llave. Al intentar abrirla, "
-                            + "la puerta tira astillas  y pierdes 1 vida.");
+                            + "la puerta suelta astillas y pierdes 1 vida.");
 
                     if (PerderVidas()) {
-                        Escena4();
+                        Escena3();
                     } else {
                         // Aquí irá la llamada al final malo.
                     }
@@ -169,7 +167,7 @@ public class Aventurafaro {
                 System.out.println("La comida estaba en mal estado y pierdes una vida por intoxicación.");
 
                 if (PerderVidas()) {
-                    Escena5();
+                    Escena6();
                 } else {
                     // Aquí irá la llamada al final malo.
                 }
@@ -177,53 +175,80 @@ public class Aventurafaro {
 
             case 2:
                 System.out.println("Decides dejar las latas y seguir");
-                System.out.println("Continuas hacia las escaleras de caracol");
+                System.out.println("Continúas hacia la escalera de caracol");
                 Escena6();
                 break;
         }
     }
 
-    public static void Escena5(){
-        System.out.println("\n" +
-                "Entras en la biblioteca. Hay un libro abierto sobre un atril, con una página marcada con un trozo de tela.\n" +
-                " En una esquina ves un cajón con el cerrojo atascado.\n");
-        System.out.println("1 - Leer la página marcada (consigues una pista para el panel de la linterna)\n");
-        if (tieneNavaja)
-        {
-            System.out.println("2 - Forzar el cajón con la navaja (solo aparece si tienes la navaja):\n" +
-                    " dentro hay una caja de cerillas, que pasan a tu inventario\n");
+    public static void Escena5() {
+
+        System.out.println("\nEntras en la biblioteca. Hay un libro abierto sobre un atril, "
+                + "con una página marcada con un trozo de tela.\n"
+                + "En una esquina ves un cajón con el cerrojo atascado.\n");
+
+        System.out.println("1 - Leer la página marcada (consigues una pista para el panel de la linterna)");
+
+        if (tieneNavaja) {
+            System.out.println("2 - Forzar el cajón con la navaja (solo aparece si tienes la navaja):\n"
+                    + "    dentro hay una caja de cerillas, que pasan a tu inventario");
         }
+
         System.out.println("3 - Ignorarlo todo y seguir adelante");
+
         int decidir = leerOpcion(3);
 
-        switch (decidir){
+        switch (decidir) {
             case 1:
-                pistaLeida =true;
-                System.out.println("Has leido la pista");
+                pistaLeida = true;
+                System.out.println("Has leído la pista");
                 Escena6();
                 break;
+
             case 2:
-                tieneNavaja =false;
-                tieneCerillas= true;
-                System.out.println("Al abrir el cajon encuentras una caja de cerillas \n pero pierdes la navaja");
-                System.out.println("Tienes paquete de cerillas en tu inventario");
-                System.out.println("Ya no tienes navaja en tu inventario");
-                Escena6();
+                if (tieneNavaja) {
+                    tieneNavaja = false;
+                    tieneCerillas = true;
+                    System.out.println("Al abrir el cajón encuentras una caja de cerillas,\n"
+                            + "pero pierdes la navaja");
+                    System.out.println("Tienes una caja de cerillas en tu inventario");
+                    System.out.println("Ya no tienes navaja en tu inventario");
+                    Escena6();
+                } else {
+                    System.out.println("No tienes nada con lo que forzar el cajón.");
+                    Escena5();
+                }
                 break;
+
             case 3:
-                System.out.println("Has decidido ignoralo todo y seguir \n se ve que no te gusta arriesgar");
+                System.out.println("Has decidido ignorarlo todo y seguir,\n"
+                        + "se ve que no te gusta arriesgar");
                 Escena6();
                 break;
-
-
         }
     }
-public static void  Escena6(){
-    System.out.println("En mitad de la escalera de caracol aparece el fantasma del farero y te corta el paso.\n" +
-            " Solo te dejará subir si le ganas a piedra, papel o tijera al mejor de tres.\n");
 
+    public static void Escena6() {
 
-}
+        System.out.println("En mitad de la escalera de caracol aparece el fantasma del farero y te corta el paso.\n"
+                + "Solo te dejará subir si le ganas a piedra, papel o tijera al mejor de tres.\n");
+        System.out.println("Deberás elegir bien si quieres escapar");
+
+        if (jugarDuelo()) {
+            System.out.println("Has vencido al fantasma y puedes seguir subiendo.");
+            // Aquí irá la llamada a la escena 7.
+        } else {
+            System.out.println("El fantasma te ha ganado y pierdes una vida.");
+
+            if (PerderVidas()) {
+                Escena6();
+            } else {
+                // Aquí irá la llamada al final malo.
+            }
+        }
+    }
+
+    // Lee una opción del teclado y no la da por buena hasta que es un número entre 1 y max.
     public static int leerOpcion(int max) {
 
         int opcion;
@@ -248,6 +273,7 @@ public static void  Escena6(){
         return opcion;
     }
 
+    // Resta una vida. Devuelve true si el jugador sigue vivo y false si ha muerto.
     public static boolean PerderVidas() {
 
         vidas--;
@@ -258,6 +284,69 @@ public static void  Escena6(){
         } else {
             System.out.println("Has muerto");
             return false;
+        }
+    }
+
+    // Juega UNA ronda de piedra, papel o tijera contra el fantasma.
+    // Devuelve: 0 = empate, 1 = gana el jugador, 2 = gana el fantasma.
+    public static int jugarRonda() {
+
+        System.out.println("1 - Piedra");
+        System.out.println("2 - Papel");
+        System.out.println("3 - Tijera");
+
+        int miJugada = leerOpcion(3);
+        int jugadaFantasma = azar.nextInt(3) + 1; // da 1, 2 o 3
+
+        System.out.println("Tú sacas: " + nombreJugada(miJugada));
+        System.out.println("El fantasma saca: " + nombreJugada(jugadaFantasma));
+
+        if (miJugada == jugadaFantasma) {
+            return 0;
+        } else if ((miJugada == 1 && jugadaFantasma == 3)
+                || (miJugada == 2 && jugadaFantasma == 1)
+                || (miJugada == 3 && jugadaFantasma == 2)) {
+            return 1;
+        } else {
+            return 2;
+        }
+    }
+
+    // Juega el mejor de tres: gana quien llegue antes a 2 rondas ganadas.
+    // Devuelve true si gana el jugador y false si gana el fantasma.
+    public static boolean jugarDuelo() {
+
+        int misVictorias = 0;
+        int victoriasFantasma = 0;
+
+        while (misVictorias < 2 && victoriasFantasma < 2) {
+            int resultado = jugarRonda();
+
+            if (resultado == 1) {
+                misVictorias++;
+                System.out.println("Ganas la ronda. Tú " + misVictorias
+                        + " - " + victoriasFantasma + " Fantasma");
+            } else if (resultado == 2) {
+                victoriasFantasma++;
+                System.out.println("Pierdes la ronda. Tú " + misVictorias
+                        + " - " + victoriasFantasma + " Fantasma");
+            } else {
+                System.out.println("Empate, se repite la ronda.");
+            }
+        }
+
+        return misVictorias == 2;
+    }
+
+    // Convierte el número de la jugada en su nombre para mostrarlo.
+    public static String nombreJugada(int jugada) {
+        switch (jugada) {
+            case 1:
+                return "piedra";
+            case 2:
+                return "papel";
+            default:
+                return "tijera";
         }
     }
 }
