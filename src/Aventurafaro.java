@@ -236,7 +236,7 @@ public class Aventurafaro {
 
         if (jugarDuelo()) {
             System.out.println("Has vencido al fantasma y puedes seguir subiendo.");
-            // Aquí irá la llamada a la escena 7.
+            Escena7();
         } else {
             System.out.println("El fantasma te ha ganado y pierdes una vida.");
 
@@ -248,6 +248,71 @@ public class Aventurafaro {
         }
     }
 
+    public static void Escena7() {
+
+        System.out.println("Llegas a la sala de la linterna. Un panel metálico con huecos "
+                + "para letras bloquea el mecanismo.\nHay que adivinar la palabra secreta para activarlo.");
+
+        System.out.println("¿Qué decides hacer?");
+        System.out.println("1 - Intentar descifrar el panel");
+        System.out.println("2 - Dar media vuelta y bajar a la planta baja");
+
+        int opcion = leerOpcion(2);
+
+        switch (opcion) {
+            case 1:
+                if (jugarAhorcado()) {
+                    System.out.println("El mecanismo se abre con un chasquido.");
+                    Escena8();
+                } else {
+                    System.out.println("El panel se bloquea para siempre.");
+                    // Aquí irá la llamada al final malo.
+                }
+                break;
+
+            case 2:
+                Escena3();
+                break;
+        }
+    }
+    public static void Escena8(){
+        System.out.println("Sales a la azotea. A lo lejos ves un barco que navega hacia la costa");
+        System.out.println("¿Qué quieres hacer?");
+        System.out.println("1 - Encender la linterna para llamar su atención");
+        System.out.println("2 - Bajar corriendo hasta el muelle");
+
+        int local = leerOpcion(2);
+
+        switch (local){
+            case 1:
+                if (tieneCerillas){
+                    System.out.println("La luz recorre el mar y el barco gira hacia ti.");
+                    // Escena10(); // Descomenta cuando tengas la escena 10
+                } else {
+                    System.out.println("No tienes cómo prenderla, el barco se aleja.");
+                    if (PerderVidas()) {
+                        Escena8();
+                    } else {
+                        // Aquí irá la llamada al final malo
+                    }
+                }
+                break;
+            case 2:
+                System.out.println("Bajas corriendo hacia el muelle...");
+                Escena9();
+                break;
+        }
+    }
+    public static void Escena9(){
+        System.out.println("Llegas al muelle y ves un pequeño bote atado con una cadena y un candado.\n Empieza a amanecer.");
+        System.out.println("1 - Abrir el candado\n");
+        System.out.println("2 - Sentarte a esperar en el muelle hasta que amanezca del todo");
+        System.out.println("3 - Volver a la azotea");
+        int decision = leerOpcion(3);
+
+
+
+    }
     // Lee una opción del teclado y no la da por buena hasta que es un número entre 1 y max.
     public static int leerOpcion(int max) {
 
@@ -348,5 +413,83 @@ public class Aventurafaro {
             default:
                 return "tijera";
         }
+    }
+
+    public static boolean jugarAhorcado() {
+
+        String palabra = "linterna";
+        String usadas = "";
+        int intentos = 6;
+        boolean completada = false;
+
+        if (pistaLeida) {
+            intentos = 7;
+            System.out.println("Recuerdas la página de la biblioteca: tienes un intento extra.");
+        }
+
+        while (intentos > 0 && !completada) {
+
+            // Construye el progreso: la letra si ya se ha probado y "_" si no.
+            String progreso = "";
+            completada = true;
+
+            for (int i = 0; i < palabra.length(); i++) {
+                char letraPalabra = palabra.charAt(i);
+
+                if (usadas.indexOf(letraPalabra) >= 0) {
+                    progreso = progreso + letraPalabra + " ";
+                } else {
+                    progreso = progreso + "_ ";
+                    completada = false;
+                }
+            }
+
+            System.out.println("\nPalabra: " + progreso);
+
+            if (!completada) {
+                System.out.println("Intentos restantes: " + intentos);
+                System.out.println("Letras usadas: " + usadas);
+
+                char letra = leerLetra();
+
+                if (usadas.indexOf(letra) >= 0) {
+                    System.out.println("Ya habías probado esa letra.");
+                } else {
+                    usadas = usadas + letra + " ";
+
+                    if (palabra.indexOf(letra) >= 0) {
+                        System.out.println("¡Bien! Esa letra está en la palabra.");
+                    } else {
+                        intentos--;
+                        System.out.println("Esa letra no está.");
+                    }
+                }
+            }
+        }
+
+        if (completada) {
+            System.out.println("¡Lo has conseguido! La palabra era: " + palabra);
+        } else {
+            System.out.println("Te has quedado sin intentos. La palabra era: " + palabra);
+        }
+
+        return completada;
+    }
+
+    public static char leerLetra() {
+
+        String texto;
+
+        do {
+            System.out.println("Introduce una letra:");
+            texto = sc.next();
+
+            if (texto.length() != 1 || !Character.isLetter(texto.charAt(0))) {
+                System.out.println("Debes escribir una sola letra.");
+            }
+
+        } while (texto.length() != 1 || !Character.isLetter(texto.charAt(0)));
+
+        return Character.toLowerCase(texto.charAt(0));
     }
 }
