@@ -52,9 +52,9 @@ Si tienes la llave, la puerta del fondo de la planta baja esconde un atajo secre
 **Vidas:** empiezas con 3. Si llegan a 0, vas al final malo. Pierdes una vida en estos casos:
 
 - Coger la llave y la navaja a la vez en el baúl (la tapa te golpea la mano).
-- Intentar abrir la puerta del fondo sin la llave (el suelo se hunde y vuelves a elegir puerta).
+- Intentar abrir la puerta del fondo sin la llave (la puerta suelta astillas y vuelves a elegir puerta).
 - Comerte una lata en la cocina (intoxicación).
-- Perder una ronda contra el fantasma.
+- Perder el duelo contra el fantasma.
 - Intentar encender la linterna sin cerillas.
 - Intentar abrir el candado del bote sin la llave.
 - Perder la mano de blackjack contra el marinero.
@@ -74,7 +74,7 @@ Además, leer la página marcada de la biblioteca da una pista que te regala un 
 **Piedra, papel o tijera** (escena 6, contra el fantasma del farero)
 - Eliges 1 - Piedra, 2 - Papel o 3 - Tijera. El ordenador elige al azar.
 - Se juega al mejor de tres. Si ganas, subes a la sala de la linterna.
-- Si pierdes una ronda, pierdes una vida y se repite.
+- Si pierdes el duelo, pierdes una vida y se repite. Los empates de una ronda se vuelven a jugar.
 
 **Ahorcado** (escena 7, panel de la linterna)
 - Hay que adivinar la palabra secreta letra a letra.
@@ -160,7 +160,7 @@ Clases del blackjack:
 
 ## Autores
 
-- Yeray del Rosario
+- Yeray del Rosario 
 - Izan Lopez  
-- David Beltre 
+- David Beltre
 
