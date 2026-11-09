@@ -160,7 +160,7 @@ Clases del blackjack:
 
 ## Autores
 
-- Yeray del Rosario — 03/11/2026
-- Izan Lopez  — 03/11/2026
-- David Beltre — 03/11/2026
+- Yeray del Rosario
+- Izan Lopez  
+- David Beltre 
 
