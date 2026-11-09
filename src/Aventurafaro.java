@@ -1,6 +1,8 @@
 // Repositorio: https://github.com/iizann/aventura-faro
 // Estructura principal
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -99,7 +101,7 @@ public class Aventurafaro {
                 if (PerderVidas()) {
                     Escena3();
                 } else {
-                    // Aquí irá la llamada al final malo.
+                    Escena12();
                 }
                 break;
         }
@@ -143,7 +145,7 @@ public class Aventurafaro {
                     if (PerderVidas()) {
                         Escena3();
                     } else {
-                        // Aquí irá la llamada al final malo.
+                        Escena12();
                     }
                 }
                 break;
@@ -169,7 +171,7 @@ public class Aventurafaro {
                 if (PerderVidas()) {
                     Escena6();
                 } else {
-                    // Aquí irá la llamada al final malo.
+                    Escena12();
                 }
                 break;
 
@@ -243,7 +245,7 @@ public class Aventurafaro {
             if (PerderVidas()) {
                 Escena6();
             } else {
-                // Aquí irá la llamada al final malo.
+                Escena12();
             }
         }
     }
@@ -266,7 +268,7 @@ public class Aventurafaro {
                     Escena8();
                 } else {
                     System.out.println("El panel se bloquea para siempre.");
-                    // Aquí irá la llamada al final malo.
+                    Escena12();
                 }
                 break;
 
@@ -287,13 +289,13 @@ public class Aventurafaro {
             case 1:
                 if (tieneCerillas){
                     System.out.println("La luz recorre el mar y el barco gira hacia ti.");
-                    // Escena10(); // Descomenta cuando tengas la escena 10
+                    Escena10();
                 } else {
                     System.out.println("No tienes cómo prenderla, el barco se aleja.");
                     if (PerderVidas()) {
                         Escena8();
                     } else {
-                        // Aquí irá la llamada al final malo
+                        Escena12();
                     }
                 }
                 break;
@@ -310,8 +312,167 @@ public class Aventurafaro {
         System.out.println("3 - Volver a la azotea");
         int decision = leerOpcion(3);
 
+        switch (decision) {
+            case 1:
+                if (tieneLlave) {
+                    System.out.println("La llave gira en el candado y la cadena cae al agua.\n"
+                            + "Pero dentro del bote está sentado un viejo marinero que baraja unas cartas.\n"
+                            + "\"Este bote es mío. Si lo quieres, gánamelo al Blackjack.\"");
 
+                    // ÚLTIMA PRUEBA: el blackjack contra el marinero
+                    if (jugarBlackjack()) {
+                        System.out.println("El marinero sonríe y te cede los remos.");
+                        Escena13();
+                    } else {
+                        System.out.println("El marinero recoge las cartas: \"Otra vez será\". Pierdes una vida.");
+                        if (PerderVidas()) {
+                            Escena9();
+                        } else {
+                            Escena12();
+                        }
+                    }
+                } else {
+                    System.out.println("No tienes la llave. Tiras del candado y te cortas con la cadena oxidada.");
+                    if (PerderVidas()) {
+                        Escena9();
+                    } else {
+                        Escena12();
+                    }
+                }
+                break;
 
+            case 2:
+                System.out.println("Te sientas en el muelle a esperar...");
+                Escena11();
+                break;
+
+            case 3:
+                System.out.println("Vuelves a subir a la azotea.");
+                Escena8();
+                break;
+        }
+    }
+
+    // ===================== FINALES =====================
+
+    public static void Escena10() {
+        System.out.println("\n===== FINAL BUENO =====");
+        System.out.println("El barco se acerca al faro y unos marineros te suben a bordo. Estás a salvo.");
+    }
+
+    public static void Escena11() {
+        System.out.println("\n===== FINAL NEUTRAL =====");
+        System.out.println("Al amanecer pasan unos pescadores y te llevan a tierra,\n"
+                + "pero sigues sin saber quién eres ni cómo llegaste al faro.");
+    }
+
+    public static void Escena12() {
+        System.out.println("\n===== FINAL MALO =====");
+        System.out.println("La oscuridad del faro te envuelve. Nunca saliste de allí.");
+    }
+
+    public static void Escena13() {
+        System.out.println("\n===== FINAL SECRETO =====");
+        System.out.println("Remas hasta una isla lejana. Allí descubres que el farero\n"
+                + "llevaba años esperando a alguien como tú.");
+    }
+
+    // ===================== BLACKJACK =====================
+
+    // Juega manos de Blackjack contra el marinero hasta que alguien gane (los empates se repiten).
+    // Devuelve true si gana el jugador y false si gana el marinero.
+    public static boolean jugarBlackjack() {
+
+        int resultado;
+
+        do {
+            resultado = jugarManoBlackjack();
+            if (resultado == 0) {
+                System.out.println("Empate. El marinero vuelve a repartir.");
+            }
+        } while (resultado == 0);
+
+        return resultado == 1;
+    }
+
+    // Juega UNA mano. Devuelve: 0 = empate, 1 = gana el jugador, 2 = gana el marinero.
+    public static int jugarManoBlackjack() {
+
+        Baraja baraja = new Baraja();
+        Mano jugador = new Mano();
+        Mano marinero = new Mano();
+
+        // 1. Reparto inicial: 2 cartas para cada uno
+        jugador.añadirCarta(baraja.robar());
+        marinero.añadirCarta(baraja.robar());
+        jugador.añadirCarta(baraja.robar());
+        marinero.añadirCarta(baraja.robar());
+
+        System.out.println("\n--- NUEVA MANO ---");
+        System.out.println("Carta visible del marinero: " + marinero.getPrimeraCarta());
+        System.out.println("Tu mano: " + jugador);
+
+        // 2. Comprobamos si alguien tiene Blackjack nada más empezar
+        if (jugador.esBlackjack() || marinero.esBlackjack()) {
+            System.out.println("Mano del marinero: " + marinero);
+            if (jugador.esBlackjack() && marinero.esBlackjack()) {
+                System.out.println("¡Los dos tenéis Blackjack!");
+                return 0;
+            } else if (jugador.esBlackjack()) {
+                System.out.println("¡BLACKJACK! Has ganado la mano.");
+                return 1;
+            } else {
+                System.out.println("El marinero tiene Blackjack.");
+                return 2;
+            }
+        }
+
+        // 3. Turno del jugador: pide cartas hasta que se plante o se pase
+        while (jugador.getPuntos() < 21) {
+            System.out.println("1 - Pedir carta");
+            System.out.println("2 - Plantarte");
+
+            if (leerOpcion(2) == 1) {
+                Carta nueva = baraja.robar();
+                jugador.añadirCarta(nueva);
+                System.out.println("Has robado: " + nueva);
+                System.out.println("Tu mano: " + jugador);
+            } else {
+                break;
+            }
+        }
+
+        if (jugador.getPuntos() > 21) {
+            System.out.println("Te has pasado de 21.");
+            return 2;
+        }
+
+        // 4. Turno del marinero: roba obligatoriamente hasta tener 17 o más
+        System.out.println("\nTurno del marinero...");
+        System.out.println("Mano del marinero: " + marinero);
+        while (marinero.getPuntos() < 17) {
+            Carta nueva = baraja.robar();
+            marinero.añadirCarta(nueva);
+            System.out.println("El marinero roba: " + nueva);
+            System.out.println("Mano del marinero: " + marinero);
+        }
+
+        // 5. Comparamos resultados
+        int puntosJugador = jugador.getPuntos();
+        int puntosMarinero = marinero.getPuntos();
+
+        System.out.println("\nTú: " + puntosJugador + " | Marinero: " + puntosMarinero);
+
+        if (puntosMarinero > 21) {
+            System.out.println("El marinero se ha pasado de 21.");
+            return 1;
+        } else if (puntosJugador > puntosMarinero) {
+            return 1;
+        } else if (puntosJugador < puntosMarinero) {
+            return 2;
+        } else {
+            return 0;
+        }
     }
     // Lee una opción del teclado y no la da por buena hasta que es un número entre 1 y max.
     public static int leerOpcion(int max) {
@@ -491,5 +652,104 @@ public class Aventurafaro {
         } while (texto.length() != 1 || !Character.isLetter(texto.charAt(0)));
 
         return Character.toLowerCase(texto.charAt(0));
+    }
+}
+
+// ===================== CLASES DEL BLACKJACK =====================
+
+// Representa una carta de la baraja: tiene un palo y un nombre (A, 2, 3... J, Q, K)
+class Carta {
+    private String palo;
+    private String nombre;
+
+    public Carta(String palo, String nombre) {
+        this.palo = palo;
+        this.nombre = nombre;
+    }
+
+    // Devuelve cuánto vale la carta en el Blackjack
+    public int getValor() {
+        if (nombre.equals("A")) {
+            return 11; // El As vale 11 (luego lo bajamos a 1 si nos pasamos)
+        } else if (nombre.equals("J") || nombre.equals("Q") || nombre.equals("K")) {
+            return 10; // Las figuras valen 10
+        } else {
+            return Integer.parseInt(nombre); // Del 2 al 10 valen su número
+        }
+    }
+
+    public boolean esAs() {
+        return nombre.equals("A");
+    }
+
+    @Override
+    public String toString() {
+        return nombre + " de " + palo;
+    }
+}
+
+// Contiene las 52 cartas, las baraja y permite robar
+class Baraja {
+    private ArrayList<Carta> cartas = new ArrayList<>();
+
+    public Baraja() {
+        String[] palos = {"Corazones", "Diamantes", "Tréboles", "Picas"};
+        String[] nombres = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
+
+        // Creamos una carta por cada combinación de palo y nombre (4 x 13 = 52)
+        for (String palo : palos) {
+            for (String nombre : nombres) {
+                cartas.add(new Carta(palo, nombre));
+            }
+        }
+        Collections.shuffle(cartas); // Mezclamos la baraja
+    }
+
+    // Saca la primera carta de la baraja y la devuelve
+    public Carta robar() {
+        return cartas.remove(0);
+    }
+}
+
+// Las cartas que tiene un jugador (tú o el marinero)
+class Mano {
+    private ArrayList<Carta> cartas = new ArrayList<>();
+
+    public void añadirCarta(Carta carta) {
+        cartas.add(carta);
+    }
+
+    // Calcula los puntos de la mano teniendo en cuenta los Ases
+    public int getPuntos() {
+        int puntos = 0;
+        int ases = 0;
+
+        for (Carta carta : cartas) {
+            puntos += carta.getValor();
+            if (carta.esAs()) {
+                ases++;
+            }
+        }
+
+        // Si nos pasamos de 21 y tenemos Ases, cada As pasa de valer 11 a valer 1
+        while (puntos > 21 && ases > 0) {
+            puntos -= 10;
+            ases--;
+        }
+        return puntos;
+    }
+
+    // Blackjack = 21 con solo 2 cartas
+    public boolean esBlackjack() {
+        return cartas.size() == 2 && getPuntos() == 21;
+    }
+
+    public Carta getPrimeraCarta() {
+        return cartas.get(0);
+    }
+
+    @Override
+    public String toString() {
+        return cartas.toString() + " -> " + getPuntos() + " puntos";
     }
 }
