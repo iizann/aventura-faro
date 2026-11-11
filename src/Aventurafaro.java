@@ -499,10 +499,20 @@ public class Aventurafaro {
         return opcion;
     }
 
-    // Resta una vida. Devuelve true si el jugador sigue vivo y false si ha muerto.
+    // Resta 1 vida. Devuelve true si el jugador sigue vivo y false si ha muerto.
     public static boolean perderVidas() {
+        return perderVidas(1);
+    }
 
-        vidas--;
+    // Resta n vidas (sobrecarga). Devuelve true si el jugador sigue vivo y false si ha muerto.
+    public static boolean perderVidas(int n) {
+
+        vidas = vidas - n;
+
+        if (vidas < 0) {
+            vidas = 0;
+        }
+
         System.out.println("Te quedan " + vidas + " vidas.");
 
         if (vidas > 0) {
@@ -514,7 +524,7 @@ public class Aventurafaro {
     }
 
     // Juega UNA ronda de piedra, papel o tijera contra el fantasma.
-    // Devuelve: 0 = empate, 1 = gana el jugador, 2 = gana el fantasma.
+// Devuelve: 0 = empate, 1 = gana el jugador, 2 = gana el fantasma.
     public static int jugarRonda() {
 
         System.out.println("1 - Piedra");
@@ -527,15 +537,15 @@ public class Aventurafaro {
         System.out.println("Tú sacas: " + nombreJugada(miJugada));
         System.out.println("El fantasma saca: " + nombreJugada(jugadaFantasma));
 
-        if (miJugada == jugadaFantasma) {
-            return 0;
-        } else if ((miJugada == 1 && jugadaFantasma == 3)
-                || (miJugada == 2 && jugadaFantasma == 1)
-                || (miJugada == 3 && jugadaFantasma == 2)) {
-            return 1;
-        } else {
-            return 2;
-        }
+        // Matriz de resultados: fila = tu jugada, columna = la del fantasma
+        // (orden: piedra, papel, tijera). 0 = empate, 1 = ganas tú, 2 = gana el fantasma.
+        int[][] resultados = {
+                {0, 2, 1},  // tú sacas piedra
+                {1, 0, 2},  // tú sacas papel
+                {2, 1, 0}   // tú sacas tijera
+        };
+
+        return resultados[miJugada - 1][jugadaFantasma - 1];
     }
 
     // Juega el mejor de tres: gana quien llegue antes a 2 rondas ganadas.
