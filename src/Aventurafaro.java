@@ -1,6 +1,7 @@
 // Repositorio: https://github.com/iizann/aventura-faro
 // Estructura principal
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -15,6 +16,7 @@ public class Aventurafaro {
     static boolean tieneNavaja = false;
     static boolean tieneCerillas = false;
     static boolean pistaLeida = false;
+    static int velocidad = 120; // milisegundos entre palabras al escribir la historia
 
     public static void main(String[] args) {
 
@@ -43,7 +45,7 @@ public class Aventurafaro {
 
     public static void escena1() {
 
-        System.out.println("Despiertas en el sótano de un faro abandonado, "
+        escribirLento("Despiertas en el sótano de un faro abandonado, "
                 + "con la cabeza dolorida y sin recordar cómo has llegado hasta allí. "
                 + "La linterna está apagada y apenas ves nada,\n pero distingues "
                 + "unas escaleras que suben y un viejo baúl en una esquina.");
@@ -69,7 +71,7 @@ public class Aventurafaro {
 
     public static void escena2() {
 
-        System.out.println("Abres el baúl y dentro encuentras una llave oxidada "
+        escribirLento("Abres el baúl y dentro encuentras una llave oxidada "
                 + "y una navaja.\nLa tapa pesa y parece que se va a cerrar de golpe.");
 
         System.out.println("¿Qué decides hacer?");
@@ -94,7 +96,7 @@ public class Aventurafaro {
 
             case 3:
                 System.out.println("Has cogido las 2 pero...");
-                System.out.println("La tapa te golpea la mano y pierdes una vida.");
+                escribirLento("La tapa te golpea la mano y pierdes una vida.");
                 tieneLlave = true;
                 tieneNavaja = true;
 
@@ -109,7 +111,7 @@ public class Aventurafaro {
 
     public static void escena3() {
 
-        System.out.println("Llegas a la planta baja del faro. Hay tres puertas: "
+        escribirLento("Llegas a la planta baja del faro. Hay tres puertas: "
                 + "\nla de la cocina, la de la biblioteca y una puerta pequeña "
                 + "al fondo, con la madera hinchada por la humedad.");
 
@@ -139,7 +141,7 @@ public class Aventurafaro {
                     System.out.println("Has abierto la puerta");
                     escena7(); // atajo secreto: sube directo a la sala de la linterna
                 } else {
-                    System.out.println("No tienes la llave. Al intentar abrirla, "
+                    escribirLento("No tienes la llave. Al intentar abrirla, "
                             + "la puerta suelta astillas y pierdes 1 vida.");
 
                     if (perderVidas()) {
@@ -154,7 +156,7 @@ public class Aventurafaro {
 
     public static void escena4() {
 
-        System.out.println("Entras en la cocina. Sobre la mesa hay unas latas de comida de hace años.\n"
+        escribirLento("Entras en la cocina. Sobre la mesa hay unas latas de comida de hace años.\n"
                 + "Tienes hambre, pero no sabes si seguirán en buen estado.");
 
         System.out.println("¿Qué decides hacer?");
@@ -166,7 +168,7 @@ public class Aventurafaro {
         switch (comida) {
             case 1:
                 System.out.println("Decides comerte la lata");
-                System.out.println("La comida estaba en mal estado y pierdes una vida por intoxicación.");
+                escribirLento("La comida estaba en mal estado y pierdes una vida por intoxicación.");
 
                 if (perderVidas()) {
                     escena6();
@@ -177,7 +179,7 @@ public class Aventurafaro {
 
             case 2:
                 System.out.println("Decides dejar las latas y seguir");
-                System.out.println("Continúas hacia la escalera de caracol");
+                escribirLento("Continúas hacia la escalera de caracol");
                 escena6();
                 break;
         }
@@ -185,7 +187,7 @@ public class Aventurafaro {
 
     public static void escena5() {
 
-        System.out.println("\nEntras en la biblioteca. Hay un libro abierto sobre un atril, "
+        escribirLento("\nEntras en la biblioteca. Hay un libro abierto sobre un atril, "
                 + "con una página marcada con un trozo de tela.\n"
                 + "En una esquina ves un cajón con el cerrojo atascado.\n");
 
@@ -211,19 +213,19 @@ public class Aventurafaro {
                 if (tieneNavaja) {
                     tieneNavaja = false;
                     tieneCerillas = true;
-                    System.out.println("Al abrir el cajón encuentras una caja de cerillas,\n"
+                    escribirLento("Al abrir el cajón encuentras una caja de cerillas,\n"
                             + "pero pierdes la navaja");
                     System.out.println("Tienes una caja de cerillas en tu inventario");
                     System.out.println("Ya no tienes navaja en tu inventario");
                     escena6();
                 } else {
-                    System.out.println("No tienes nada con lo que forzar el cajón.");
+                    escribirLento("No tienes nada con lo que forzar el cajón.");
                     escena5();
                 }
                 break;
 
             case 3:
-                System.out.println("Has decidido ignorarlo todo y seguir,\n"
+                escribirLento("Has decidido ignorarlo todo y seguir,\n"
                         + "se ve que no te gusta arriesgar");
                 escena6();
                 break;
@@ -232,15 +234,15 @@ public class Aventurafaro {
 
     public static void escena6() {
 
-        System.out.println("En mitad de la escalera de caracol aparece el fantasma del farero y te corta el paso.\n"
+        escribirLento("En mitad de la escalera de caracol aparece el fantasma del farero y te corta el paso.\n"
                 + "Solo te dejará subir si le ganas a piedra, papel o tijera al mejor de tres.\n");
         System.out.println("Deberás elegir bien si quieres escapar");
 
         if (jugarDuelo()) {
-            System.out.println("Has vencido al fantasma y puedes seguir subiendo.");
+            escribirLento("Has vencido al fantasma y puedes seguir subiendo.");
             escena7();
         } else {
-            System.out.println("El fantasma te ha ganado y pierdes una vida.");
+            escribirLento("El fantasma te ha ganado y pierdes una vida.");
 
             if (perderVidas()) {
                 escena6();
@@ -252,7 +254,7 @@ public class Aventurafaro {
 
     public static void escena7() {
 
-        System.out.println("Llegas a la sala de la linterna. Un panel metálico con huecos "
+        escribirLento("Llegas a la sala de la linterna. Un panel metálico con huecos "
                 + "para letras bloquea el mecanismo.\nHay que adivinar la palabra secreta para activarlo.");
 
         System.out.println("¿Qué decides hacer?");
@@ -264,10 +266,10 @@ public class Aventurafaro {
         switch (opcion) {
             case 1:
                 if (jugarAhorcado()) {
-                    System.out.println("El mecanismo se abre con un chasquido.");
+                    escribirLento("El mecanismo se abre con un chasquido.");
                     escena8();
                 } else {
-                    System.out.println("El panel se bloquea para siempre.");
+                    escribirLento("El panel se bloquea para siempre.");
                     escena12();
                 }
                 break;
@@ -278,7 +280,7 @@ public class Aventurafaro {
         }
     }
     public static void escena8(){
-        System.out.println("Sales a la azotea. A lo lejos ves un barco que navega hacia la costa");
+        escribirLento("Sales a la azotea. A lo lejos ves un barco que navega hacia la costa");
         System.out.println("¿Qué quieres hacer?");
         System.out.println("1 - Encender la linterna para llamar su atención");
         System.out.println("2 - Bajar corriendo hasta el muelle");
@@ -288,10 +290,10 @@ public class Aventurafaro {
         switch (local){
             case 1:
                 if (tieneCerillas){
-                    System.out.println("La luz recorre el mar y el barco gira hacia ti.");
+                    escribirLento("La luz recorre el mar y el barco gira hacia ti.");
                     escena10();
                 } else {
-                    System.out.println("No tienes cómo prenderla, el barco se aleja.");
+                    escribirLento("No tienes cómo prenderla, el barco se aleja.");
                     if (perderVidas()) {
                         escena8();
                     } else {
@@ -300,13 +302,13 @@ public class Aventurafaro {
                 }
                 break;
             case 2:
-                System.out.println("Bajas corriendo hacia el muelle...");
+                escribirLento("Bajas corriendo hacia el muelle...");
                 escena9();
                 break;
         }
     }
     public static void escena9(){
-        System.out.println("Llegas al muelle y ves un pequeño bote atado con una cadena y un candado.\n Empieza a amanecer.");
+        escribirLento("Llegas al muelle y ves un pequeño bote atado con una cadena y un candado.\n Empieza a amanecer.");
         System.out.println("1 - Abrir el candado");
         System.out.println("2 - Sentarte a esperar en el muelle hasta que amanezca del todo");
         System.out.println("3 - Volver a la azotea");
@@ -315,16 +317,16 @@ public class Aventurafaro {
         switch (decision) {
             case 1:
                 if (tieneLlave) {
-                    System.out.println("La llave gira en el candado y la cadena cae al agua.\n"
+                    escribirLento("La llave gira en el candado y la cadena cae al agua.\n"
                             + "Pero dentro del bote está sentado un viejo marinero que baraja unas cartas.\n"
                             + "\"Este bote es mío. Si lo quieres, gánamelo al Blackjack.\"");
 
                     // ÚLTIMA PRUEBA: el blackjack contra el marinero
                     if (jugarBlackjack()) {
-                        System.out.println("El marinero sonríe y te cede los remos.");
+                        escribirLento("El marinero sonríe y te cede los remos.");
                         escena13();
                     } else {
-                        System.out.println("El marinero recoge las cartas: \"Otra vez será\". Pierdes una vida.");
+                        escribirLento("El marinero recoge las cartas: \"Otra vez será\". Pierdes una vida.");
                         if (perderVidas()) {
                             escena9();
                         } else {
@@ -332,7 +334,7 @@ public class Aventurafaro {
                         }
                     }
                 } else {
-                    System.out.println("No tienes la llave. Tiras del candado y te cortas con la cadena oxidada.");
+                    escribirLento("No tienes la llave. Tiras del candado y te cortas con la cadena oxidada.");
                     if (perderVidas()) {
                         escena9();
                     } else {
@@ -342,12 +344,12 @@ public class Aventurafaro {
                 break;
 
             case 2:
-                System.out.println("Te sientas en el muelle a esperar...");
+                escribirLento("Te sientas en el muelle a esperar...");
                 escena11();
                 break;
 
             case 3:
-                System.out.println("Vuelves a subir a la azotea.");
+                escribirLento("Vuelves a subir a la azotea.");
                 escena8();
                 break;
         }
@@ -357,23 +359,23 @@ public class Aventurafaro {
 
     public static void escena10() {
         System.out.println("\n===== FINAL BUENO =====");
-        System.out.println("El barco ve la luz del faro y te rescata. Despiertas a salvo, con el sol saliendo sobre el mar.\n");
+        escribirLento("El barco ve la luz del faro y te rescata. Despiertas a salvo, con el sol saliendo sobre el mar.\n");
     }
 
     public static void escena11() {
         System.out.println("\n===== FINAL NEUTRAL =====");
-        System.out.println("Unos pescadores te encuentran en el muelle por la mañana y te llevan a tierra. Estás vivo,\n" +
+        escribirLento("Unos pescadores te encuentran en el muelle por la mañana y te llevan a tierra. Estás vivo,\n" +
                 " pero sigues sin saber quién eres ni qué pasó en el faro.");
     }
 
     public static void escena12() {
         System.out.println("\n===== FINAL MALO =====");
-        System.out.println("Te quedas sin fuerzas, sin vidas o sin salida. El faro se queda de nuevo en silencio.");
+        escribirLento("Te quedas sin fuerzas, sin vidas o sin salida. El faro se queda de nuevo en silencio.");
     }
 
     public static void escena13() {
         System.out.println("\n===== FINAL SECRETO =====");
-        System.out.println("Navegas en el bote hasta una isla lejana donde descubres que el farero \n" +
+        escribirLento("Navegas en el bote hasta una isla lejana donde descubres que el farero \n" +
                 " llevaba años esperando a alguien como tú.");
     }
 
@@ -474,6 +476,46 @@ public class Aventurafaro {
             return 0;
         }
     }
+    // Escribe un texto palabra a palabra (solo para la historia), con una pausa entre palabras.
+    // Cada palabra se imprime entera, así que el salto de línea que provoca pulsar Intro
+    // cae siempre entre dos palabras y nunca las parte.
+    // Si el jugador pulsa Intro, se muestra el resto del texto de golpe.
+    public static void escribirLento(String texto) {
+
+        int inicio = 0;
+
+        while (inicio < texto.length()) {
+            int fin = texto.indexOf(' ', inicio);
+
+            if (fin == -1) {
+                fin = texto.length();
+            } else {
+                fin = fin + 1; // incluye el espacio detrás de la palabra
+            }
+
+            System.out.print(texto.substring(inicio, fin));
+            inicio = fin;
+
+            try {
+                if (System.in.available() > 0) {
+                    // Descarta lo que ha tecleado para que no se cuele en la siguiente pregunta
+                    while (System.in.available() > 0) {
+                        System.in.read();
+                    }
+                    System.out.print(texto.substring(inicio));
+                    break;
+                }
+                Thread.sleep(velocidad);
+            } catch (IOException e) {
+                // si no se puede leer el teclado, seguimos escribiendo normal
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+
+        System.out.println();
+    }
+
     // Lee una opción del teclado y no la da por buena hasta que es un número entre 1 y max.
     public static int leerOpcion(int max) {
 
@@ -499,10 +541,20 @@ public class Aventurafaro {
         return opcion;
     }
 
-    // Resta una vida. Devuelve true si el jugador sigue vivo y false si ha muerto.
+    // Resta 1 vida. Devuelve true si el jugador sigue vivo y false si ha muerto.
     public static boolean perderVidas() {
+        return perderVidas(1);
+    }
 
-        vidas--;
+    // Resta n vidas (sobrecarga). Devuelve true si el jugador sigue vivo y false si ha muerto.
+    public static boolean perderVidas(int n) {
+
+        vidas = vidas - n;
+
+        if (vidas < 0) {
+            vidas = 0;
+        }
+
         System.out.println("Te quedan " + vidas + " vidas.");
 
         if (vidas > 0) {
@@ -514,7 +566,7 @@ public class Aventurafaro {
     }
 
     // Juega UNA ronda de piedra, papel o tijera contra el fantasma.
-    // Devuelve: 0 = empate, 1 = gana el jugador, 2 = gana el fantasma.
+// Devuelve: 0 = empate, 1 = gana el jugador, 2 = gana el fantasma.
     public static int jugarRonda() {
 
         System.out.println("1 - Piedra");
@@ -527,15 +579,15 @@ public class Aventurafaro {
         System.out.println("Tú sacas: " + nombreJugada(miJugada));
         System.out.println("El fantasma saca: " + nombreJugada(jugadaFantasma));
 
-        if (miJugada == jugadaFantasma) {
-            return 0;
-        } else if ((miJugada == 1 && jugadaFantasma == 3)
-                || (miJugada == 2 && jugadaFantasma == 1)
-                || (miJugada == 3 && jugadaFantasma == 2)) {
-            return 1;
-        } else {
-            return 2;
-        }
+        // Matriz de resultados: fila = tu jugada, columna = la del fantasma
+        // (orden: piedra, papel, tijera). 0 = empate, 1 = ganas tú, 2 = gana el fantasma.
+        int[][] resultados = {
+                {0, 2, 1},  // tú sacas piedra
+                {1, 0, 2},  // tú sacas papel
+                {2, 1, 0}   // tú sacas tijera
+        };
+
+        return resultados[miJugada - 1][jugadaFantasma - 1];
     }
 
     // Juega el mejor de tres: gana quien llegue antes a 2 rondas ganadas.
